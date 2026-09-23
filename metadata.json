@@ -1,0 +1,6 @@
+{
+  "name": "Calculator",
+  "description": "Modern utility calculator disguise opening Mahal Kita M&H private real-time chat application.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
