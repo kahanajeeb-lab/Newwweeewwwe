@@ -36,10 +36,19 @@ export const App: React.FC = () => {
   /**
    * Triggered when user enters 2580 and presses '=' on Calculator
    */
-  const handleUnlockSecret = () => {
+  const handleUnlockSecret = async () => {
     if (currentUser) {
       // Already authenticated, proceed directly to chat
       setScreenState('CHAT');
+    } else if (auth.currentUser) {
+      try {
+        const profile = await createOrLoadUserProfile(auth.currentUser);
+        setCurrentUser(profile);
+        setScreenState('CHAT');
+      } catch (e) {
+        console.error("Failed to restore cached session:", e);
+        setScreenState('AUTH');
+      }
     } else {
       // Not yet authenticated, show Google Login screen
       setScreenState('AUTH');

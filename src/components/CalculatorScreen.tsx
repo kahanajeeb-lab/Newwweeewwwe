@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Delete, HelpCircle } from 'lucide-react';
+import { verifyPIN } from '../utils/security';
 
 interface CalculatorScreenProps {
   onUnlockSecret: () => void;
@@ -89,13 +90,13 @@ export const CalculatorScreen: React.FC<CalculatorScreenProps> = ({ onUnlockSecr
     }
   };
 
-  const handleEqual = () => {
+  const handleEqual = async () => {
     const trimmedInput = display.trim();
 
-    // Check SECRET CODE: "2580" and press "="
-    // If the display equals 2580 (or previous value/sequence was 2580), unlock!
-    if (trimmedInput === '2580' || (prevValue === 2580 && waitingForOperand)) {
-      // Secret access sequence satisfied!
+    // Check SECRET CODE: dynamic verification via verifyPIN
+    // Defaults to 2580 or matches custom owner-configured PIN
+    const isSecretMatch = await verifyPIN(trimmedInput);
+    if (isSecretMatch || (prevValue !== null && (await verifyPIN(String(prevValue))) && waitingForOperand)) {
       onUnlockSecret();
       return;
     }
